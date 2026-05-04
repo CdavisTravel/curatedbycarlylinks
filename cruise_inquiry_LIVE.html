@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cruise Inquiry — Curated by Carly</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--navy:#1A2E4A;--blue:#2563A8;--blue-light:#EAF2FB;--blue-mid:#BFDBF7;--text:#1F2D3D;--text-mid:#4A5F74;--text-muted:#7A93A8;--border:#D4DFE9;--bg-page:#F5F8FB;--bg-form:#FFFFFF;--divider:#E0EAF2}
+  body{font-family:'Jost',sans-serif;background:var(--bg-page);color:var(--text);min-height:100vh}
+  .hero{background:var(--navy);padding:3rem 2rem 2.75rem;text-align:center;position:relative}
+  .hero::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:48px;height:2px;background:var(--blue);opacity:0.8}
+  .eyebrow{font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:#7EB8E8;font-weight:400;margin-bottom:1rem}
+  .hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,48px);font-weight:300;color:#FFFFFF;line-height:1.12;margin-bottom:0.85rem}
+  .hero h1 em{font-style:italic;color:#7EB8E8}
+  .hero p{font-size:13px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.85;max-width:500px;margin:0 auto}
+  .perks-bar{background:var(--blue);padding:1.25rem 1.5rem;text-align:center}
+  .perks-list{display:flex;flex-direction:column;align-items:center;gap:0.5rem}
+  .perk-item{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.9);font-weight:400}
+  .perk-item::before{content:'· '}
+  .form-wrap{max-width:660px;margin:0 auto;padding:2.75rem 1.5rem 4rem}
+  .section{margin-bottom:2.5rem}
+  .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:1.4rem}
+  .sec-num{width:27px;height:27px;border-radius:50%;border:1.5px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--blue);flex-shrink:0}
+  .sec-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;color:var(--navy);letter-spacing:0.02em}
+  .sec-desc{font-size:12.5px;font-weight:300;color:var(--text-muted);line-height:1.65;margin-bottom:1.25rem;font-style:italic}
+  .sec-line{flex:1;height:0.5px;background:var(--divider)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .full{grid-column:1/-1}
+  .field{display:flex;flex-direction:column;gap:5px}
+  label{font-size:10.5px;font-weight:500;letter-spacing:0.11em;text-transform:uppercase;color:var(--text-mid)}
+  .field-hint{font-size:12px;color:var(--text-muted);font-weight:300;line-height:1.55;margin-top:2px}
+  input[type="text"],input[type="email"],input[type="tel"],input[type="date"],input[type="number"],select,textarea{width:100%;padding:11px 13px;border:1px solid var(--border);border-radius:7px;background:var(--bg-form);color:var(--text);font-family:'Jost',sans-serif;font-size:14px;font-weight:300;transition:border-color 0.16s,box-shadow 0.16s;-webkit-appearance:none;appearance:none}
+  input::placeholder,textarea::placeholder{color:#B0C4D4}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,168,0.1)}
+  textarea{resize:vertical;min-height:82px;line-height:1.65}
+  select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%232563A8' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:36px;cursor:pointer}
+  .toggle-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:5px}
+  .toggle-btn{flex:1;min-width:100px;padding:10px;border:1px solid var(--border);border-radius:7px;font-size:13px;font-weight:300;font-family:'Jost',sans-serif;cursor:pointer;color:var(--text-mid);background:var(--bg-form);text-align:center;transition:all 0.15s;user-select:none}
+  .toggle-btn:hover{border-color:var(--blue);color:var(--blue)}
+  .toggle-btn.on{background:var(--navy);color:#FFFFFF;border-color:var(--navy)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:5px}
+  .chip{padding:7px 15px;border:1px solid var(--border);border-radius:30px;font-size:12.5px;font-weight:300;cursor:pointer;color:var(--text-mid);background:var(--bg-form);transition:all 0.15s;user-select:none}
+  .chip:hover{border-color:var(--blue);color:var(--blue)}
+  .chip.on{background:var(--navy);color:#FFFFFF;border-color:var(--navy)}
+  .cond-panel{display:none;margin-top:12px;padding:16px;border:1px solid var(--blue-mid);border-radius:8px;background:var(--blue-light)}
+  .cond-panel.show{display:block}
+  .cond-panel .field+.field{margin-top:10px}
+  .rule{height:0.5px;background:var(--divider);margin:0 0 2.5rem}
+  .submit-wrap{margin-top:2.5rem;text-align:center}
+  .submit-btn{display:inline-block;padding:15px 56px;background:var(--navy);color:#FFFFFF;border:none;border-radius:6px;font-family:'Jost',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:background 0.18s}
+  .submit-btn:hover{background:var(--blue)}
+  .form-sign{margin-top:1rem;font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--text-muted)}
+  .success{display:none;text-align:center;padding:5rem 2rem}
+  .success-ring{width:54px;height:54px;border-radius:50%;border:1.5px solid var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem}
+  .success-ring svg{width:20px;height:20px;stroke:var(--blue);fill:none;stroke-width:1.5}
+  .success h2{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--navy);margin-bottom:0.75rem}
+  .success p{font-size:14px;font-weight:300;color:var(--text-muted);line-height:1.85;max-width:420px;margin:0 auto}
+  .success-sig{margin-top:2rem;font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--blue)}
+  .calendly-nudge{margin-top:2rem;padding:1.5rem;background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:8px;text-align:left}
+  .calendly-nudge strong{font-size:13px;font-weight:500;color:var(--navy);display:block;margin-bottom:0.35rem}
+  .calendly-nudge p{font-size:13px;font-weight:300;color:var(--text-mid);line-height:1.7;margin-bottom:0.75rem}
+  .calendly-btn{display:inline-block;font-size:12px;font-weight:500;color:var(--blue);text-decoration:none;letter-spacing:0.06em;border-bottom:1px solid var(--blue-mid);padding-bottom:1px;transition:color 0.15s}
+  .calendly-btn:hover{color:var(--navy);border-color:var(--navy)}
+  .page-footer{border-top:1px solid var(--divider);padding:1.75rem 1.5rem;text-align:center;background:var(--bg-form)}
+  .footer-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--navy);margin-bottom:0.25rem}
+  .footer-role{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--blue);margin-bottom:0.35rem;font-weight:400}
+  .footer-poses{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.6rem}
+  .footer-email{font-size:13px;font-weight:300;color:var(--text-muted)}
+  .footer-email a{color:var(--blue);text-decoration:none}
+  .footer-note{margin-top:0.6rem;font-size:11px;color:var(--text-muted);font-weight:300;line-height:1.6}
+  @media(max-width:520px){.grid{grid-template-columns:1fr}.hero{padding:2.25rem 1.25rem 2.5rem}.form-wrap{padding:2rem 1.25rem 3.5rem}}
+</style>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>emailjs.init("F1XJTBEuxLLiTeABB");</script>
+</head>
+<body>
+
+<div class="hero">
+  <div style="margin-bottom:1.25rem;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 360" style="width:200px;height:auto;display:block;margin:0 auto;">
+      <circle cx="340" cy="140" r="96" fill="none" stroke="#FFFFFF" stroke-width="1.25"/>
+      <circle cx="340" cy="140" r="80" fill="none" stroke="#C9A97A" stroke-width="0.6"/>
+      <line x1="340" y1="45" x2="340" y2="62" stroke="#FFFFFF" stroke-width="1.25"/>
+      <line x1="340" y1="218" x2="340" y2="235" stroke="#FFFFFF" stroke-width="1.25"/>
+      <line x1="245" y1="140" x2="262" y2="140" stroke="#FFFFFF" stroke-width="1.25"/>
+      <line x1="418" y1="140" x2="435" y2="140" stroke="#FFFFFF" stroke-width="1.25"/>
+      <line x1="272" y1="72" x2="279" y2="79" stroke="#C9A97A" stroke-width="0.75"/>
+      <line x1="401" y1="72" x2="408" y2="79" stroke="#C9A97A" stroke-width="0.75"/>
+      <line x1="272" y1="201" x2="279" y2="194" stroke="#C9A97A" stroke-width="0.75"/>
+      <line x1="401" y1="201" x2="408" y2="194" stroke="#C9A97A" stroke-width="0.75"/>
+      <text x="340" y="42" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#C9A97A">N</text>
+      <text x="340" y="248" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#C9A97A">S</text>
+      <text x="238" y="145" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#C9A97A">W</text>
+      <text x="442" y="145" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#C9A97A">E</text>
+      <text x="340" y="158" text-anchor="middle" font-family="Georgia,serif" font-size="52" fill="#FFFFFF" letter-spacing="2">CD</text>
+      <text x="340" y="278" text-anchor="middle" font-family="Georgia,serif" font-size="20" fill="#FFFFFF" letter-spacing="0.16em">CARLY DAVIS</text>
+      <line x1="200" y1="288" x2="480" y2="288" stroke="#C9A97A" stroke-width="0.75"/>
+      <text x="340" y="310" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#7EB8E8" letter-spacing="0.28em">LUXURY TRAVEL DESIGNER</text>
+    </svg>
+  </div>
+  <p class="eyebrow">Curated by Carly</p>
+  <h1>Set Sail <em>in Style</em></h1>
+  <p>From intimate river cruises and small ship expeditions to mid-size and large ocean voyages — I book across the full spectrum of cruise experiences, securing the best options tailored just for you.</p>
+  <p style="margin-top:0.75rem; font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:#C9A97A; font-weight:400;">Poses Travel &amp; Co. &nbsp;·&nbsp; Smartflyer affiliated</p>
+</div>
+
+<div class="perks-bar">
+  <div class="perks-list">
+    <div class="perk-item">River, ocean &amp; expedition cruises</div>
+    <div class="perk-item">Exclusive onboard credits &amp; upgrades</div>
+    <div class="perk-item">Response within 24 hrs</div>
+  </div>
+</div>
+
+<div class="form-wrap">
+<div id="main-form">
+
+  <!-- 01 · YOUR DETAILS -->
+  <div class="section">
+    <div class="sec-head"><div class="sec-num">01</div><div class="sec-title">Your details</div><div class="sec-line"></div></div>
+    <div class="grid">
+      <div class="field">
+        <label>Full name</label>
+        <input type="text" id="f-name" name="name" placeholder="Jane Smith"/>
+      </div>
+      <div class="field">
+        <label>Email address</label>
+        <input type="email" id="f-email" name="email" placeholder="jane@email.com"/>
+      </div>
+      <div class="field">
+        <label>Phone number</label>
+        <input type="tel" name="phone" placeholder="+1 (000) 000-0000"/>
+      </div>
+      <div class="field">
+        <label>Best way to reach you</label>
+        <select name="preferred_contact">
+          <option value="">Select one</option>
+          <option>Phone call</option>
+          <option>Text / WhatsApp</option>
+          <option>Email</option>
+        </select>
+      </div>
+      <div class="field full">
+        <label>How did you hear about me?</label>
+        <select name="how_heard">
+          <option value="">Select one</option>
+          <option>Instagram</option>
+          <option>Referral from a friend or client</option>
+          <option>Google search</option>
+          <option>Virtuoso</option>
+          <option>Email / newsletter</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- 02 · CRUISE OVERVIEW -->
+  <div class="section">
+    <div class="sec-head"><div class="sec-num">02</div><div class="sec-title">Cruise overview</div><div class="sec-line"></div></div>
+    <p class="sec-desc">Tell me about the voyage you have in mind — or let me help you discover the perfect one.</p>
+    <div class="grid">
+      <div class="field full">
+        <label>Type of cruise</label>
+        <input type="hidden" name="cruise_type" id="cruise_type" value=""/>
+        <div class="chips" data-target="cruise_type">
+          <div class="chip" onclick="chipToggle(this)">Ocean cruise</div>
+          <div class="chip" onclick="chipToggle(this)">River cruise</div>
+          <div class="chip" onclick="chipToggle(this)">Expedition</div>
+          <div class="chip" onclick="chipToggle(this)">Small ship</div>
+          <div class="chip" onclick="chipToggle(this)">Luxury yacht</div>
+          <div class="chip" onclick="chipToggle(this)">Not sure — advise me</div>
+        </div>
+      </div>
+      <div class="field full">
+        <label>Destination or region of interest</label>
+        <input type="text" name="destination" placeholder="e.g. Mediterranean, Caribbean, Alaska, Antarctica, Europe rivers…"/>
+      </div>
+      <div class="field">
+        <label>Approximate travel dates</label>
+        <input type="text" name="travel_dates" placeholder="e.g. Fall 2026, January 2027…"/>
+      </div>
+      <div class="field">
+        <label>Trip duration</label>
+        <select name="trip_duration">
+          <option value="">Select one</option>
+          <option>3 – 5 nights</option>
+          <option>6 – 9 nights</option>
+          <option>10 – 14 nights</option>
+          <option>15+ nights</option>
+          <option>Open to suggestions</option>
+        </select>
+      </div>
+      <div class="field full">
+        <label>Are your dates flexible?</label>
+        <input type="hidden" name="dates_flexible" id="dates_flexible" value=""/>
+        <div class="toggle-row">
+          <div class="toggle-btn" onclick="simpleToggle(this,'dates_flexible')">Yes, flexible</div>
+          <div class="toggle-btn" onclick="simpleToggle(this,'dates_flexible')">No, fixed dates</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- 03 · TRAVEL PARTY -->
+  <div class="section">
+    <div class="sec-head"><div class="sec-num">03</div><div class="sec-title">Travel party</div><div class="sec-line"></div></div>
+    <div class="grid">
+      <div class="field">
+        <label>Number of guests</label>
+        <input type="number" name="num_guests" min="1" max="50" placeholder="2"/>
+      </div>
+      <div class="field">
+        <label>Special occasion?</label>
+        <select name="special_occasion">
+          <option value="">None</option>
+          <option>Anniversary</option>
+          <option>Honeymoon</option>
+          <option>Birthday</option>
+          <option>Family celebration</option>
+          <option>Corporate group</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field full">
+        <label>Have you cruised before?</label>
+        <input type="hidden" name="cruised_before" id="cruised_before" value=""/>
+        <div class="toggle-row">
+          <div class="toggle-btn" onclick="cruisedToggle(this,'yes')">Yes</div>
+          <div class="toggle-btn" onclick="cruisedToggle(this,'no')">No — first time!</div>
+        </div>
+        <div class="cond-panel" id="cruised-yes">
+          <div class="field">
+            <label>Which cruise lines have you sailed with?</label>
+            <input type="text" name="previous_cruise_lines" placeholder="e.g. Celebrity, Royal Caribbean, Viking…"/>
+          </div>
+          <div class="field" style="margin-top:10px">
+            <label>What did you love or want to do differently?</label>
+            <textarea name="previous_cruise_feedback" placeholder="Help me build on your past experience…"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- 04 · CRUISE PREFERENCES -->
+  <div class="section">
+    <div class="sec-head"><div class="sec-num">04</div><div class="sec-title">Cruise preferences</div><div class="sec-line"></div></div>
+    <p class="sec-desc">Help me understand what matters most to you onboard and ashore.</p>
+    <div class="grid">
+      <div class="field full">
+        <label>Cruise lines you're interested in (if any)</label>
+        <input type="hidden" name="preferred_cruise_lines" id="preferred_cruise_lines" value=""/>
+        <div class="chips" data-target="preferred_cruise_lines">
+          <div class="chip" onclick="chipToggle(this)">Explora Journeys</div>
+          <div class="chip" onclick="chipToggle(this)">Four Seasons Yacht Club</div>
+          <div class="chip" onclick="chipToggle(this)">Seabourn</div>
+          <div class="chip" onclick="chipToggle(this)">Regent</div>
+          <div class="chip" onclick="chipToggle(this)">Oceania</div>
+          <div class="chip" onclick="chipToggle(this)">Viking</div>
+          <div class="chip" onclick="chipToggle(this)">Celebrity</div>
+          <div class="chip" onclick="chipToggle(this)">HX Expeditions</div>
+          <div class="chip" onclick="chipToggle(this)">Open to suggestions</div>
+        </div>
+      </div>
+      <div class="field full">
+        <label>Most important onboard experience</label>
+        <input type="hidden" name="onboard_priorities" id="onboard_priorities" value=""/>
+        <div class="chips" data-target="onboard_priorities">
+          <div class="chip" onclick="chipToggle(this)">Fine dining</div>
+          <div class="chip" onclick="chipToggle(this)">Spa &amp; wellness</div>
+          <div class="chip" onclick="chipToggle(this)">Shore excursions</div>
+          <div class="chip" onclick="chipToggle(this)">Entertainment</div>
+          <div class="chip" onclick="chipToggle(this)">Relaxation</div>
+          <div class="chip" onclick="chipToggle(this)">Adventure activities</div>
+          <div class="chip" onclick="chipToggle(this)">Cultural enrichment</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Cabin preference</label>
+        <select name="cabin_preference">
+          <option value="">Select one</option>
+          <option>Interior</option>
+          <option>Ocean view</option>
+          <option>Balcony</option>
+          <option>Suite</option>
+          <option>Penthouse / Owner's suite</option>
+          <option>Open to suggestions</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Estimated budget per person</label>
+        <select name="budget_per_person">
+          <option value="">Select a range</option>
+          <option>Under $3,000</option>
+          <option>$3,000 – $6,000</option>
+          <option>$6,000 – $10,000</option>
+          <option>$10,000 – $20,000</option>
+          <option>$20,000+</option>
+          <option>Flexible / let's discuss</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- 05 · FINAL NOTES -->
+  <div class="section">
+    <div class="sec-head"><div class="sec-num">05</div><div class="sec-title">Anything else?</div><div class="sec-line"></div></div>
+    <p class="sec-desc">Any additional details, questions, or specific experiences you're hoping for.</p>
+    <div class="field">
+      <label>Special requests or notes</label>
+      <textarea name="special_requests" placeholder="Dietary needs, mobility requirements, a specific port you must visit, a celebration you'd like arranged onboard…"></textarea>
+    </div>
+  </div>
+
+  <div class="submit-wrap">
+    <button class="submit-btn" onclick="submitForm()">Submit my cruise inquiry</button>
+    <p class="form-sign">I'll be in touch within 24 hours — Carly</p>
+  </div>
+
+</div>
+
+<div class="success" id="success-screen">
+  <div class="success-ring"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+  <h2>Inquiry received</h2>
+  <p>Thank you for sharing your cruise vision. I'll review your details and be in touch within 24 hours with curated options and next steps tailored just for you.</p>
+  <div class="success-sig">— Carly</div>
+  <div class="calendly-nudge">
+    <strong>Ready to schedule your intro call?</strong>
+    <p>Cruise planning works best over a conversation — let's find a time to chat about your perfect voyage.</p>
+    <a href="https://calendly.com/cdavis-122/two-circle-intro-call" target="_blank" class="calendly-btn">Book your intro call →</a>
+  </div>
+</div>
+</div>
+
+<div class="page-footer">
+  <div class="footer-name">Carly Davis</div>
+  <div class="footer-role">Luxury Travel Designer</div>
+  <div class="footer-poses">Poses Travel &amp; Co. · Smartflyer affiliated</div>
+  <div class="footer-email">Questions? Reach me at <a href="mailto:cdavis@posestravel.co">cdavis@posestravel.co</a></div>
+  <div class="footer-note">Explora Journeys · Four Seasons Yacht Club · Celebrity · Oceania · Viking · Regent · Seabourn · HX Expeditions &amp; more</div>
+</div>
+
+<script>
+  function simpleToggle(el, inputId) {
+    el.closest('.toggle-row').querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('on'));
+    el.classList.add('on');
+    if (inputId) document.getElementById(inputId).value = el.textContent.trim();
+  }
+
+  function cruisedToggle(el, which) {
+    el.closest('.toggle-row').querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('on'));
+    el.classList.add('on');
+    document.getElementById('cruised_before').value = which === 'yes' ? 'Yes' : 'No';
+    document.getElementById('cruised-yes').classList.remove('show');
+    if (which === 'yes') document.getElementById('cruised-yes').classList.add('show');
+  }
+
+  function chipToggle(el) {
+    el.classList.toggle('on');
+    const chipsContainer = el.closest('.chips');
+    const targetId = chipsContainer.getAttribute('data-target');
+    if (targetId) {
+      const selected = Array.from(chipsContainer.querySelectorAll('.chip.on')).map(c => c.textContent.trim()).join(', ');
+      document.getElementById(targetId).value = selected;
+    }
+  }
+
+  async function submitForm() {
+    const name = document.getElementById('f-name').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    if (!name || !email) { alert('Please fill in your name and email address to continue.'); return; }
+
+    const btn = document.querySelector('.submit-btn');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    // Send to Formspree
+    const formData = new FormData();
+    document.querySelectorAll('input[name], select[name], textarea[name]').forEach(el => {
+      if (el.value) formData.append(el.name, el.value);
+    });
+    try {
+      await fetch('https://formspree.io/f/xdayjaok', { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
+    } catch(e) { console.warn('Formspree error:', e); }
+
+    // Send via EmailJS
+    const templateParams = {
+      form_type: 'Cruise Inquiry',
+      from_name: name,
+      from_email: email,
+      phone: document.querySelector('input[name="phone"]')?.value || '',
+      message: `Cruise type: ${document.getElementById('cruise_type')?.value}\nDestination: ${document.querySelector('input[name="destination"]')?.value}\nDates: ${document.querySelector('input[name="travel_dates"]')?.value}\nDuration: ${document.querySelector('select[name="trip_duration"]')?.value}\nGuests: ${document.querySelector('input[name="num_guests"]')?.value}\nCruise lines: ${document.getElementById('preferred_cruise_lines')?.value}\nCabin: ${document.querySelector('select[name="cabin_preference"]')?.value}\nBudget: ${document.querySelector('select[name="budget_per_person"]')?.value}\nRequests: ${document.querySelector('textarea[name="special_requests"]')?.value}`
+    };
+
+    emailjs.send('service_gdvfh84', 'template_fqsws0u', templateParams)
+      .then(() => {
+        document.getElementById('main-form').style.display = 'none';
+        document.getElementById('success-screen').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, (error) => {
+        document.getElementById('main-form').style.display = 'none';
+        document.getElementById('success-screen').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        console.error('EmailJS error:', error);
+      });
+  }
+</script>
+</body>
+</html>
